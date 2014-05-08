@@ -1,0 +1,25 @@
+extends ../shared/template
+
+block content
+  h1 Priority List
+
+  form(method='POST', action='/priorities')
+    input(type='text', name='name', placeholder='Name')
+    input(type='color', name='color', placeholder='Color')
+    button.button.glow.button-action Add
+
+  table
+    thead
+      tr
+        th Delete
+        th Name
+        th Color
+    tbody
+      each priority in priorities
+        tr(style='background-color:#{priority.color}')
+          td
+            form(method='POST', action='/priorities/#{priority._id}')
+              input(type='hidden', name='_method', value='DELETE')
+              button.button.glow.button-caution X
+          td #{priority.name}
+          td #{priority.color}

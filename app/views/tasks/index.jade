@@ -1,0 +1,35 @@
+extends ../shared/template
+
+block content
+  h1 Task List
+
+  form(method='POST', action='/tasks')
+    input(type='text', name='title', placeholder='Title')
+    input(type='date', name='due')
+    select(name='priorityId')
+      each priority in priorities
+        option(value='#{priority._id}') #{priority.name}
+    button.button.glow.button-action Add
+
+  table
+    thead
+      tr
+        th Delete
+        th Title
+        th Due
+        th Complete
+        th Priority
+    tbody
+      each task in tasks
+        tr(style='background-color:#{task.priority.color}' class= task.isComplete ? 'done' : 'ongoing')
+          td
+            form(method='POST', action='/tasks/#{task._id}')
+              input(type='hidden', name='_method', value='DELETE')
+              button.button.glow.button-caution X
+          td= task.title
+          td= task.due.toDateString()
+          td
+            form(method='POST', action='/tasks/#{task._id}')
+              input(type='hidden', name='_method', value='PUT')
+              input.update(type='checkbox', checked= task.isComplete)
+          td= task.priority.name
